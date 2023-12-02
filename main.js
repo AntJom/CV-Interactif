@@ -19,6 +19,7 @@ let ground;
 let model;
 let bat1;
 let cottage;
+let groundparking1;
 
 // Créer une boîte englobante pour la voiture
 const carBoundingBox = new THREE.Box3();
@@ -26,9 +27,23 @@ const carBoundingBox = new THREE.Box3();
 // Créer une boîte englobante pour l'objet
 const bat1BoundingBox = new THREE.Box3();
 
+const cottageBoundingBox = new THREE.Box3();
+const parking1BoundingBox = new THREE.Box3();
+
+const geometry = new THREE.BoxGeometry(10,3,5);
+const material = new THREE.MeshBasicMaterial({  color: 0x00ff00 , transparent: true , opacity : 0});
+const parking1 = new THREE.Mesh( geometry, material );
+scene.add(parking1);
+
+
 const direction = new THREE.Vector3(1, 0, 0); // Vecteur de direction initial (vers la droite)
 const clock = new THREE.Clock()
 let speed = 0;
+
+
+
+const coordinatesDiv = document.getElementById('coordinates');
+
 
 
 const loader = new GLTFLoader();
@@ -84,9 +99,17 @@ const groundMaterial = new THREE.MeshBasicMaterial({ map: groundTexture, side: T
 ground = new THREE.Mesh(groundGeometry, groundMaterial);
 ground.rotation.x = -Math.PI / 2; // Rotation pour placer le sol à l'horizontale
 ground.position.y = -0.29;
-
-// Ajouter le cube au monde
 scene.add(ground);
+
+const parking1Texture = textureLoader.load('models/parking.jpg');
+const parking1Geometry = new THREE.PlaneGeometry(10, 10);
+const parking1Material = new THREE.MeshBasicMaterial({ map: parking1Texture, side: THREE.DoubleSide });
+groundparking1 = new THREE.Mesh(parking1Geometry, parking1Material);
+groundparking1.rotation.x = -Math.PI / 2; // Rotation pour placer le sol à l'horizontale
+groundparking1.position.y = -0.28;
+scene.add(groundparking1);
+// Ajouter le cube au monde
+
 
 // Configuration déplacements
 
@@ -154,10 +177,8 @@ function animate() {
 
   if (model) {
 
-    if (speed != 0){
-      speed -= 0.1;
-    }
-
+    speed=0;
+    
     
     if (keys.forward) {
       direction.set(0, 0, -1);
@@ -222,6 +243,9 @@ function animate() {
     checkCollision();
   }
 
+  const carPosition = camera.position;
+  coordinatesDiv.textContent = `Position de la voiture : x: ${carPosition.x.toFixed(1)}, y: ${carPosition.y.toFixed(1)}, z: ${carPosition.z.toFixed(1)}`;
+
 
 };
 
@@ -236,13 +260,37 @@ const moveCar = () => {
 function checkCollision() {
   // Mettre à jour la boîte englobante de l'objet
   bat1BoundingBox.setFromObject(bat1);
+  cottageBoundingBox.setFromObject(cottage);
+  parking1BoundingBox.setFromObject(parking1);
 
   // Vérifier la collision
   if (carBoundingBox.intersectsBox(bat1BoundingBox)) {
     // Collision détectée, prenez des mesures ici (par exemple, arrêtez la voiture)
     console.log('Collision détectée!');
-    speed=0;
+    camera.position.x=50;
   }
+  
+  if (carBoundingBox.intersectsBox(cottageBoundingBox)) {
+    // Collision détectée, prenez des mesures ici (par exemple, arrêtez la voiture)
+    console.log('Collision détectée!');
+    camera.position.x=30;
+    camera.position.y=12;
+  }
+
+  if (carBoundingBox.intersectsBox(parking1BoundingBox)) {
+    // Collision détectée, prenez des mesures ici (par exemple, arrêtez la voiture)
+    console.log('Collision détectée!');
+    camera.position.z=-27.9;
+    camera.position.y=8.5;
+    camera.position.x=-38.4;
+    parking1Geometry.geometry.dispose();
+    parking1Geometry = new THREE.PlaneGeometry(50,50);
+    const parking1Material = new THREE.MeshBasicMaterial({ map: parking1Texture, side: THREE.DoubleSide });
+    groundparking1 = new THREE.Mesh(parking1Geometry, parking1Material);
+    scene.add(groundparking1);
+  }
+  
+
 }
 
 animate();
