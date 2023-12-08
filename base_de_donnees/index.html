@@ -1,0 +1,30 @@
+<!-- http://localhost/base_de_donnees/index -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire</title>
+</head>
+<body>
+    <form action="traitement.php" method="post">
+        <label for="prenom">Prénom :</label>
+        <input type="text" id="prenom" name="prenom" required><br>
+
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom" required><br>
+        
+        <label for="lycee">Lycée :</label>
+        <input type="text" id="lycee" name="lycee" required><br>
+
+        <label for="ecoledinge">Ecole d'ingénieur :</label>
+        <input type="text" id="ecoledinge" name="ecoledinge" required><br>
+
+        <label for="expetranger">Experience à l'étranger :</label>
+        <input type="text" id="expetranger" name="expetranger" required><br>
+
+        <input type="submit" value="Enregistrer">
+    </form>
+</body>
+</html>
