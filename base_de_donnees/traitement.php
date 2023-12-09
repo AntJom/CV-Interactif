@@ -1,5 +1,5 @@
 <?php
-    try{
+    try{ // connection à la base de données
         $pdo_options = array(
             PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8",
             PDO::ATTR_ERRMODE =>  PDO::ERRMODE_EXCEPTION
@@ -10,7 +10,7 @@
     catch(Exception $e){
         die('Erreur : '.$e->getMessage());
     }
-    
+    // récupération des données du formulaire de index.html
     $prenom = $_POST["prenom"];
     $nom = $_POST["nom"];
     $lycee = $_POST["lycee"];
@@ -18,7 +18,7 @@
     $expetranger = $_POST["expetranger"];
     
     $donnees = $pdo->prepare('INSERT INTO `donnees` (`prenom`, `nom`, `lycee`, `ecoledinge`, `expetranger`) VALUES (?, ?, ?, ?, ?)');
-    $donnees->execute([$prenom, $nom, $lycee, $ecoledinge, $expetranger]);
+    $donnees->execute([$prenom, $nom, $lycee, $ecoledinge, $expetranger]); // insertion des données dans la base
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@
         <title>Page web</title>
     </head>
     <body>
-    <?php                      
+    <?php // affichage des données recueillies
         echo '<span class="prenom">Prénom : ' . $prenom . '</span><br>';
 
         echo '<span class="nom">Nom : ' . $nom . '</span><br>';
