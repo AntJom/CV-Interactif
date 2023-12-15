@@ -61,7 +61,7 @@ const coordinatesDiv = document.getElementById('coordinates');                  
 //chargement, placement, ajustement de la taille de la voiture sur la scène. Création d'une boîte englobant la voiture
 const carBoundingBox = new THREE.Box3();                                                                //Créer une boîte qui peut englober un objet
 const loader = new GLTFLoader();                                                                        //crée un loader pour charger les fichiers en format gltf
-loader.load('models/voiture.glb', (gltf) => {                                                           //charge le modèle 3D de la voiture réalisée sur Blender
+loader.load('/voiture.glb', (gltf) => {                                                           //charge le modèle 3D de la voiture réalisée sur Blender
   car = gltf.scene;                                                                                     
   scene.add(car);                                                                                       //ajoute le modèle 3D de la voiture à la scène
   
@@ -83,7 +83,7 @@ loader.load('models/voiture.glb', (gltf) => {                                   
 
 
 //chargement, placement, ajustement de la taille de l'ICAM sur la scène
-loader.load( 'models/icam.glb', (gltf) => { 
+loader.load( '/icam.glb', (gltf) => { 
   icam = gltf.scene;
   icam.position.x = 3;
   icam.position.y = 0.5;
@@ -98,7 +98,7 @@ loader.load( 'models/icam.glb', (gltf) => {
 
 
 //chargement, placement, ajustement de la taille d'un cottage sur la scène
-loader.load( 'models/painterly_cottage.glb', (gltf) => {
+loader.load( '/painterly_cottage.glb', (gltf) => {
  cottage = gltf.scene;
  cottage.position.x = 35;
  cottage.position.y = 1;
@@ -110,7 +110,7 @@ cottage.scale.set(10,10,10)
 
 
 //chargement, placement, ajustement de la taille de la maison en colombage sur la scène
-loader.load( 'models/maison_colombage.glb',  (gltf) => {
+loader.load( '/maison_colombage.glb',  (gltf) => {
   maison = gltf.scene;
   maison.position.x = -50;
   maison.position.y = -0.5;
@@ -129,7 +129,7 @@ loader.load( 'models/maison_colombage.glb',  (gltf) => {
 
 
 const textureLoader = new THREE.TextureLoader();                                                                //crée un chargeur de textures pour afficher les textures des modèles 3D
-const groundTexture = textureLoader.load('models/jeu-enfant.jpg');                                              //charge la texture du sol
+const groundTexture = textureLoader.load('/jeu-enfant.jpg');                                              //charge la texture du sol
 
 // Créer un plan en 2D (sol) avec la texture
 const groundGeometry = new THREE.PlaneGeometry(100, 100);                                                       // Ajuste la taille du sol
@@ -145,7 +145,7 @@ scene.add(ground);
 
 
 //chargement, placement de la place de parking 1 et de ses textures sur la scène
-const parkingTexture = textureLoader.load('models/parking.jpg');
+const parkingTexture = textureLoader.load('/parking.jpg');
 const parkingGeometry = new THREE.PlaneGeometry(10, 10);
 const parkingMaterial = new THREE.MeshBasicMaterial({ map: parkingTexture, side: THREE.DoubleSide });
 groundparking1 = new THREE.Mesh(parkingGeometry, parkingMaterial);
@@ -178,7 +178,8 @@ const keys = {
   left: false,
   right: false,
   a: false,
-  q: false
+  q: false,
+  enter: false,
 };
 
 // Écoute des événements clavier. La fonction onKeyDown va se déclencher si une touche de clavier est préssée. Sinon ce sera la fonction onKeyUp
@@ -221,6 +222,14 @@ function handleKeyEvent(keyLetter, isPressed) {
           break;
   }
 };
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
 
 
 //crée l'animation
@@ -278,20 +287,20 @@ function animate() {
 
 //actualise la position de la caméra pour suivre la voiture et la faire regarder vers le mouvement commander  
   moveCar();
-  controls.target.copy(car.position);
-  controls.update();                                                              // Met à jour les contrôles lors de l'animation
-  car.lookAt(car.position.clone().add(direction));
-  car.rotation.y += Math.PI;
-  camera.position.y = car.position.y + 10;
-  camera.position.x = car.position.x ;
-  camera.position.z = car.position.z + 15 ;
-  if (car) {
-    
-    carBoundingBox.setFromObject(car);                                            // Mettre à jour la boîte englobante de la voiture à chaque frame
+    controls.target.copy(car.position);
+    controls.update();                                                              // Met à jour les contrôles lors de l'animation
+    car.lookAt(car.position.clone().add(direction));
+    car.rotation.y += Math.PI;
+    camera.position.y = car.position.y + 10;
+    camera.position.x = car.position.x ;
+    camera.position.z = car.position.z + 15 ;
+    if (car) {
+      
+      carBoundingBox.setFromObject(car);                                            // Mettre à jour la boîte englobante de la voiture à chaque frame
 
 
-    
-    checkCollision();                                                             // Vérifie si la voiture effectue une collision
+      
+      checkCollision();                                                             // Vérifie si la voiture effectue une collision
   }
 
 //crée une barre d'info pour connaître la position de la voiture à n'importe quel moment
@@ -345,10 +354,12 @@ function checkCollision() {
     camera.position.y = 14;
     camera.position.x = -21;
 
-//si la touche entrée est préssée, renvoie vers une page html
-if (keys.enter){
-  //window.open('page.html', 'Spam', 'width=500,height=300,left=100,top=100,toolbar=no,scrollbars=yes');  POUR OUVRIR LA PAGE WEB
-  console.log('Page chargée');
+    //si la touche entrée est préssée, renvoie vers une page html
+    if (keys.enter){
+      window.open('http://stackoverflow.com', '_blank');  //POUR OUVRIR LA PAGE WEB
+      console.log('Page chargée');
+      speed = 0;
+      keys.enter = false;
 }
 
   }
@@ -360,11 +371,11 @@ if (keys.enter){
     camera.position.y = 15;
     camera.position.x = 0;
 
-//si la touche entrée est préssée, renvoie vers une page html    
-if (keys.enter){
-  //window.open('page.html', 'Spam', 'width=500,height=300,left=100,top=100,toolbar=no,scrollbars=yes');  POUR OUVRIR LA PAGE WEB
-  console.log('Page chargée');
-}
+    //si la touche entrée est préssée, renvoie vers une page html    
+    if (keys.enter){
+      //window.open('page.html', 'Spam', 'width=500,height=300,left=100,top=100,toolbar=no,scrollbars=yes');  POUR OUVRIR LA PAGE WEB
+      console.log('Page chargée');
+    }
   }
 }
 animate();
