@@ -61,7 +61,7 @@ const coordinatesDiv = document.getElementById('coordinates');                  
 //chargement, placement, ajustement de la taille de la voiture sur la scène. Création d'une boîte englobant la voiture
 const carBoundingBox = new THREE.Box3();                                                                //Créer une boîte qui peut englober un objet
 const loader = new GLTFLoader();                                                                        //crée un loader pour charger les fichiers en format gltf
-loader.load('/voiture.glb', (gltf) => {                                                           //charge le modèle 3D de la voiture réalisée sur Blender
+loader.load('models/voiture.glb', (gltf) => {                                                           //charge le modèle 3D de la voiture réalisée sur Blender
   car = gltf.scene;                                                                                     
   scene.add(car);                                                                                       //ajoute le modèle 3D de la voiture à la scène
   
@@ -83,7 +83,7 @@ loader.load('/voiture.glb', (gltf) => {                                         
 
 
 //chargement, placement, ajustement de la taille de l'ICAM sur la scène
-loader.load( '/icam.glb', (gltf) => { 
+loader.load( 'models/icam.glb', (gltf) => { 
   icam = gltf.scene;
   icam.position.x = 3;
   icam.position.y = 0.5;
@@ -98,7 +98,7 @@ loader.load( '/icam.glb', (gltf) => {
 
 
 //chargement, placement, ajustement de la taille d'un cottage sur la scène
-loader.load( '/painterly_cottage.glb', (gltf) => {
+loader.load( 'models/painterly_cottage.glb', (gltf) => {
  cottage = gltf.scene;
  cottage.position.x = 35;
  cottage.position.y = 1;
@@ -110,7 +110,7 @@ cottage.scale.set(10,10,10)
 
 
 //chargement, placement, ajustement de la taille de la maison en colombage sur la scène
-loader.load( '/maison_colombage.glb',  (gltf) => {
+loader.load( 'models/maison_colombage.glb',  (gltf) => {
   maison = gltf.scene;
   maison.position.x = -50;
   maison.position.y = -0.5;
@@ -128,12 +128,11 @@ loader.load( '/maison_colombage.glb',  (gltf) => {
 
 
 
-const textureLoader = new THREE.TextureLoader();                                                                //crée un chargeur de textures pour afficher les textures des modèles 3D
-const groundTexture = textureLoader.load('/jeu-enfant.jpg');                                              //charge la texture du sol
+const textureLoader = new THREE.TextureLoader();                                                                //crée un chargeur de textures pour afficher les textures des modèles 3D                                            //charge la texture du sol
 
 // Créer un plan en 2D (sol) avec la texture
 const groundGeometry = new THREE.PlaneGeometry(100, 100);                                                       // Ajuste la taille du sol
-const groundMaterial = new THREE.MeshBasicMaterial({ map: groundTexture, side: THREE.DoubleSide });             // Appliquer la texture au sol
+const groundMaterial = new THREE.MeshBasicMaterial({ color: 0xfff5e1, side: THREE.DoubleSide });             // Appliquer la texture au sol
 ground = new THREE.Mesh(groundGeometry, groundMaterial);                                                        //crée le sol
 ground.rotation.x = -Math.PI / 2;                                                                               // Rotation pour placer le sol à l'horizontale
 ground.position.y = -0.29;
@@ -145,7 +144,7 @@ scene.add(ground);
 
 
 //chargement, placement de la place de parking 1 et de ses textures sur la scène
-const parkingTexture = textureLoader.load('/parking.jpg');
+const parkingTexture = textureLoader.load('models/parking.jpg');
 const parkingGeometry = new THREE.PlaneGeometry(10, 10);
 const parkingMaterial = new THREE.MeshBasicMaterial({ map: parkingTexture, side: THREE.DoubleSide });
 groundparking1 = new THREE.Mesh(parkingGeometry, parkingMaterial);
@@ -223,14 +222,11 @@ function handleKeyEvent(keyLetter, isPressed) {
   }
 };
 
-function sleep(milliseconds) {
-  const date = Date.now();
-  let currentDate = null;
-  do {
-    currentDate = Date.now();
-  } while (currentDate - date < milliseconds);
+function changeSizeWithDelay(mesh, newSize, delay) {
+  setTimeout(() => {
+    mesh.scale.set(newSize, newSize, newSize);
+  }, delay);
 }
-
 
 //crée l'animation
 function animate() {
@@ -248,38 +244,46 @@ function animate() {
     if (keys.forward) {                                                           //si la flèche avant est préssée, fait avancer la voiture avec une vitesse de 10 en avant
       direction.set(0, 0, -1);
       speed = 10;
+      checkCollisionBuild();
     }
     if (keys.backward) {                                                          //si la flèche arrière est préssée, fait avancer la voiture avec une vitesse de 10 en arrière 
       direction.set(0, 0, 1);
       speed = 10;
+      checkCollisionBuild();
     }
     if (keys.left) {                                                              //si la flèche gauche est préssée, fait avancer la voiture avec une vitesse de 10 vers la gauche
       direction.set(-1, 0, 0);
       speed = 10;
+      checkCollisionBuild();
     }
     if (keys.right) {                                                             //si la flèche droite est préssée, fait avancer la voiture avec une vitesse de 10 vers la droite
       direction.set(1, 0, 0);
       speed = 10;
+      checkCollisionBuild();
     }
 
     if (keys.forward && keys.right) {                                             //si la flèche droite et avant sont préssées, fait avancer la voiture avec une vitesse de 10 en tournant vers la droite
       direction.set(1, 0, -1);
       speed = 10;
+      checkCollisionBuild();
     }
 
     if (keys.forward && keys.left) {                                              //si la flèche gauche et avant sont préssées, fait avancer la voiture avec une vitesse de 10 en tournant vers la gauche
       direction.set(-1, 0, -1);
       speed = 10;
+      checkCollisionBuild();
     }
 
     if (keys.backward && keys.right) {                                            //si la flèche droite et arrière sont préssées, fait reculer la voiture avec une vitesse de 10 en tournant vers la droite
       direction.set(1, 0, 1);
       speed = 10;
+      checkCollisionBuild();
     }
 
     if (keys.backward && keys.left) {                                             //si la flèche gauche et arrière sont préssées, fait reculer la voiture avec une vitesse de 10 en tournant vers la gauche
       direction.set(-1, 0, 1);
       speed = 10;
+      checkCollisionBuild();
     }
 
   };
@@ -300,7 +304,7 @@ function animate() {
 
 
       
-      checkCollision();                                                             // Vérifie si la voiture effectue une collision
+      checkCollisionParking();                                                             // Vérifie si la voiture effectue une collision
   }
 
 //crée une barre d'info pour connaître la position de la voiture à n'importe quel moment
@@ -325,25 +329,11 @@ const moveCar = () => {
 
 
 
-function checkCollision() {
+function checkCollisionParking() {
   // Met à jour les boîtes englobantes des batîments et place de parking
-  icamBoundingBox.setFromObject(icam);
-  cottageBoundingBox.setFromObject(cottage);
   parking1BoundingBox.setFromObject(parking1);
   parking2BoundingBox.setFromObject(parking2);
 
-  // Vérifie la collision de la voiture avec le batîment de l'ICAM. Si la collision a lieu, la position de la caméra change
-  if (carBoundingBox.intersectsBox(icamBoundingBox)) {
-    console.log('Collision détectée!');
-    camera.position.x=50;
-  }
-  
-  // Vérifie la collision de la voiture avec le cottage. Si la collision a lieu, la position de la caméra change
-  if (carBoundingBox.intersectsBox(cottageBoundingBox)) {
-    console.log('Collision détectée!');
-    camera.position.x=30;
-    camera.position.y=12;
-  }
 
   
   // Vérifie la collision de la voiture avec la place de parking 1. Si la collision a lieu, la position de la caméra change
@@ -353,6 +343,7 @@ function checkCollision() {
     camera.position.z = 15;
     camera.position.y = 14;
     camera.position.x = -21;
+
 
     //si la touche entrée est préssée, renvoie vers une page html
     if (keys.enter){
@@ -374,8 +365,37 @@ function checkCollision() {
     //si la touche entrée est préssée, renvoie vers une page html    
     if (keys.enter){
       //window.open('page.html', 'Spam', 'width=500,height=300,left=100,top=100,toolbar=no,scrollbars=yes');  POUR OUVRIR LA PAGE WEB
+      window.open('http://stackoverflow.com', '_blank');  //POUR OUVRIR LA PAGE WEB
       console.log('Page chargée');
+      speed = 0;
     }
   }
+
+  
+}
+
+function checkCollisionBuild() {
+  // Met à jour les boîtes englobantes des batîments et place de parking
+  icamBoundingBox.setFromObject(icam);
+  cottageBoundingBox.setFromObject(cottage);
+  maisonBoundingBox.setFromObject(maison);
+  // Vérifie la collision de la voiture avec le batîment de l'ICAM. Si la collision a lieu, la voiture ne peut pas traverser
+  if (carBoundingBox.intersectsBox(icamBoundingBox)) {
+    console.log('Collision détectée!');
+    speed =0;
+  }
+  
+  // Vérifie la collision de la voiture avec le cottage. Si la collision a lieu, la voiture ne peut pas traverser
+  if (carBoundingBox.intersectsBox(cottageBoundingBox)) {
+    console.log('Collision détectée!');
+    speed=0;
+  }
+/*
+  if (carBoundingBox.intersectsBox(maisonBoundingBox)){
+    console.log('Collision détectée!');
+    speed =0;
+  }
+*/
+  
 }
 animate();
