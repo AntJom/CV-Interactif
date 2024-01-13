@@ -1,0 +1,189 @@
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  background-color: #f4f4f4; /* Couleur de fond gris clair */
+  color: #000; /* Texte noir */
+  }
+  
+  .main-container p{
+    display: flex;
+    flex-direction: column;
+
+    text-align:justify;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .main-container h2{
+    display: flex;
+    flex-direction: column;
+
+    text-align: left;
+    margin-left: 10px;
+  }
+
+  
+  .profile-image {
+    width: 25%;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+  
+  .content {
+    width: 80%;
+    margin: 0 auto;
+    float : left
+  }
+.lycee-section div {
+    display: inline-block;
+    vertical-align: top; /* Ajustez l'alignement vertical selon vos besoins */
+  }
+  
+.lycee-section h2 {
+    width: 45%;
+    float: right;
+    text-align: left;
+    padding-top: 50px;
+  }
+  
+/*images à gauche */
+
+.lycee-section p {
+    width: 45vw;
+    float: right;
+    height: auto;
+    text-align: justify;
+
+}
+
+.lycee-section img{
+    width: 50vw;
+    height: auto;
+    max-width: 50%; 
+    float: left;
+    padding: 10px;
+}
+
+.icam-section h2 {
+  width: 45%;
+  float: left;
+  text-align: right;
+  margin-left: 10px;
+}
+
+.icam-section h3 {
+  width: 45%;
+  float: left;
+  text-align: right;
+  margin-left: 10px;
+}
+
+
+.icam-section p {
+    width: 45vw;
+    float: left;
+    height: auto;
+    text-align: justify;
+    margin-left: 10px;
+}
+
+.icam-section img{
+    width: 50vw;
+    height: auto;
+    max-width: 48%; 
+    float: right;
+    padding: 10px;
+    
+}
+
+.icam-section h3 {
+  text-align: left;
+
+
+}
+
+
+.interets-section div {
+  display: inline-block;
+  vertical-align: top; /* Ajustez l'alignement vertical selon vos besoins */
+}
+
+.interets-section h2 {
+  width: 45%;
+  float: right;
+  text-align: left;
+  padding-top: 50px;
+}
+
+.interets-section h4 {
+  float: left;
+  text-align: justify;
+  margin-left: 50px;
+
+}
+/*images à gauche */
+
+.interets-section p {
+  width: 45vw;
+  float: right;
+  height: auto;
+  text-align: justify;
+}
+
+.interets-section img{
+  width: 50vw;
+  height: auto;
+  max-width: 50%; 
+  float: left;
+  padding: 10px;
+}
+
+
+.certifications-section div {
+  display: inline-block;
+  vertical-align: top; /* Ajustez l'alignement vertical selon vos besoins */
+}
+
+.certifications-section h2 {
+  width: 45%;
+  float: right;
+  text-align: left;
+  padding-top: 50px;
+}
+
+
+/*images à gauche */
+
+.certifications-section p {
+  width: 45vw;
+  float: right;
+  height: auto;
+  text-align: justify;
+  padding-top: 50px;
+}
+
+.certifications-section img{
+  width: 50vw;
+  height: auto;
+  max-width: 50%; 
+  float: left;
+  padding: 10px;
+}
+
+footer {
+  background-color: #333; /* Couleur de fond du pied de page */
+  color: white; /* Couleur du texte dans le pied de page */
+  padding: 20px; /* Espace interne du pied de page */
+  text-align: left ; /* Alignement du texte au centre */
+  position: fixed; /* Fixer le pied de page en bas de la page */
+  width: 100%; /* Occuper toute la largeur de la page */
+  bottom: 0; /* Aligner en bas de la page */
+  height: 15px;
+}
+header {
+background-color: #333;
+color: white;
+padding: 20px;
+text-align: center;
+height: 70px; /* Ajustez la hauteur selon vos besoins */
+}
