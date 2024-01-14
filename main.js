@@ -2,7 +2,6 @@ import * as THREE from 'three';                                                 
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';                                        // importe la classe GLTFLoader permettant de télécharger la scène du modèle 3D
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';                           //importe le module OrbitControls pour créer les commandes permettant à l'utilisateur de controler la caméra
 
-
 const scene = new THREE.Scene();                                                                        //crée une nouvelle scène
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);      //crée une instance de caméra en perspective
 
@@ -13,42 +12,121 @@ renderer.setSize(window.innerWidth, window.innerHeight);                        
 document.body.appendChild(renderer.domElement);                                                         //permet de dire dans quelle "conteneur" on va trouver notre renderer (dans le domElement)
 const controls = new OrbitControls(camera,renderer.domElement);                                         //crée les commandes qui pourront être utilisées par l'utilisateur pour se déplacer sur la scène
 
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+scene.add( directionalLight );
+
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap; // default THREE.PCFShadowMap
+
+//Create a DirectionalLight and turn on shadows for the light
+const light = new THREE.DirectionalLight( 0xffffff, 1 );
+light.position.set( -20, 10, 0 ); //default; light shining from top
+light.castShadow = true; // default false
+scene.add( light );
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);                                             // crée une lumière ambiente pour éclairer la scène
 scene.add(ambientLight);                                                                                //ajoute la lumière à la scène
 
-let ground;                                                                                             //définitons de variables qui serviront pour faire le sol de la scène, la voiture, les bâtiments et les places de parking
+// Créer une lumière ponctuelle
+
+
+light.shadow.mapSize.width = 1024; // default
+light.shadow.mapSize.height = 1024; // default
+light.shadow.camera.near = 0.5; // default
+light.shadow.camera.far = 500; // default
+
+
+const spotLight = new THREE.SpotLight( 0xffffff );
+spotLight.position.set( -22, 0, 0 );
+spotLight.map = new THREE.TextureLoader().load( '/parking.jpg' );
+
+spotLight.castShadow = true;
+
+spotLight.shadow.mapSize.width = 1024;
+spotLight.shadow.mapSize.height = 1024;
+
+spotLight.shadow.camera.near = 500;
+spotLight.shadow.camera.far = 4000;
+spotLight.shadow.camera.fov = 30;
+
+scene.add( spotLight );
+//définitons de variables qui serviront pour faire le sol de la scène, la voiture, les bâtiments et les places de parking
 let car;
+let paysage;
 let icam;
 let maison;
-let cottage;
+let pise;
 let groundparking1;
 let groundparking2;
-
-
-                 
+let groundparking3;
+let boostpossible;
+let building1;
+let building2;
 
 
 const icamBoundingBox = new THREE.Box3();                                                               // Créer une boîte englobante pour chaque bâtiment, place de parking
-const cottageBoundingBox = new THREE.Box3();
 const parking1BoundingBox = new THREE.Box3();
 const maisonBoundingBox = new THREE.Box3();
 const parking2BoundingBox = new THREE.Box3();
+const parking3BoundingBox = new THREE.Box3();
+const piseBoundingBox = new THREE.Box3();
+const building1BoundingBox = new THREE.Box3();
+const building2BoundingBox = new THREE.Box3();
 
 const geometry = new THREE.BoxGeometry(10,3,5);                                                         //crée une boîte transparente sur le parking 1
 const material = new THREE.MeshBasicMaterial({  color: 0x00ff00 , transparent: true , opacity : 0});
+
+
 const parking1 = new THREE.Mesh( geometry, material );
-parking1.position.y = -0.28;                                                                            //positionnement du parking 1
-parking1.position.z = -20;
+parking1.position.set(169,-0.28,268);
 scene.add(parking1);                                                                                    //ajout de la boîte transparente à la scène
+
+const lake1 = new THREE.Mesh( geometry, material ); 
+lake1.position.set(22,0,120);
+lake1.scale.set(13,10,9);
+scene.add(lake1);
 
 
 const parking2 = new THREE.Mesh( geometry, material );                                                  //crée une boîte transparente sur le parking 2
-parking2.position.x = -22;                                                                              //positionnement du parking 2
-parking2.position.z = 0;
-parking2.position.y = 0;
+parking2.position.set(-231,0,291);
 scene.add(parking2);                                                                                    //ajout de la boîte transparente à la scène
 
+const parking3 = new THREE.Mesh(geometry, material);
+parking3.position.set(91,0,146);
+scene.add(parking3);
 
+
+
+
+//Placement du fond pour délimiter la zone accessible
+const fond = new THREE.Mesh( geometry, material );
+fond.position.set(0,1,100);
+fond.scale.set(660,50,10);
+scene.add(fond);
+
+icam = new THREE.Mesh( geometry, material );
+icam.position.set(165,0,206);
+icam.scale.set(13,10,15);
+scene.add(icam);
+
+maison = new THREE.Mesh( geometry, material );
+maison.position.set(240,0,358);
+maison.scale.set(5,5,5);
+scene.add(maison);
+
+pise = new THREE.Mesh( geometry, material );
+pise.position.set(263,0,124);
+pise.scale.set(6.5,6.5,7.5);
+scene.add(pise);
+
+building1 = new THREE.Mesh( geometry, material );
+building1.position.set(-148,6.5,293);
+building1.scale.set(8,6.5,6);
+scene.add(building1);
+
+building2 = new THREE.Mesh( geometry, material );
+building2.position.set(-349,6.5,277);
+building2.scale.set(14,6.5,20.5);
+scene.add(building2);
 
 const direction = new THREE.Vector3(1, 0, 0);                                                           //Vecteur de direction initial, dirigé vers l'axe x
 const clock = new THREE.Clock()                                                                         //ajout d'une montre pour se répérer dans le temps lors des animations sur la scène 
@@ -66,8 +144,8 @@ loader.load('models/voiture.glb', (gltf) => {                                   
   scene.add(car);                                                                                       //ajoute le modèle 3D de la voiture à la scène
   
   car.rotation.set(0, 0, 0);                                                                            //Réinitialise la rotation de la voiture 
-  car.scale.set(2,2,2)                                                                                  //augmente la taille de la voiture sur la scène
-
+  car.scale.set(3.5,3.5,3.5)                                                                                //augmente la taille de la voiture sur la scène
+  car.position.set(294,0,373);
 
 
   const box = new THREE.Box3().setFromObject(car);                                                      // Créer une boîte qui englobe la voiture
@@ -80,68 +158,19 @@ loader.load('models/voiture.glb', (gltf) => {                                   
 
 
 
+loader.load('models/paysage_avec_objets_et_ciel.glb',  (gltf) => {
+  paysage = gltf.scene;
+  paysage.position.set(0,-0.5,60);
+  paysage.scale.set(330,330,330);
+  paysage.rotation.set(0, -Math.PI/2, 0);
+  scene.add(paysage);
 
-
-//chargement, placement, ajustement de la taille de l'ICAM sur la scène
-loader.load( 'models/icam.glb', (gltf) => { 
-  icam = gltf.scene;
-  icam.position.x = 3;
-  icam.position.y = 0.5;
-  icam.position.z = -50;
-  icam.scale.set(5,5,5);
-  icam.rotation.set(0, Math.PI, 0);
-  scene.add(icam);
-  renderer.render( scene, camera );
-
-});
-
-
-
-//chargement, placement, ajustement de la taille d'un cottage sur la scène
-loader.load( 'models/painterly_cottage.glb', (gltf) => {
- cottage = gltf.scene;
- cottage.position.x = 35;
- cottage.position.y = 1;
-cottage.scale.set(10,10,10)
- scene.add(cottage);
- renderer.render( scene, camera );
-});
-
-
-
-//chargement, placement, ajustement de la taille de la maison en colombage sur la scène
-loader.load( 'models/maison_colombage.glb',  (gltf) => {
-  maison = gltf.scene;
-  maison.position.x = -50;
-  maison.position.y = -0.5;
-  maison.position.z = 0;
-  maison.scale.set(6, 6, 6);
-  maison.rotation.set(0, Math.PI/2, 0);
-  scene.add(maison);
   renderer.render( scene, camera );
 });
-
-
-
-
-
 
 
 
 const textureLoader = new THREE.TextureLoader();                                                                //crée un chargeur de textures pour afficher les textures des modèles 3D                                            //charge la texture du sol
-
-// Créer un plan en 2D (sol) avec la texture
-const groundGeometry = new THREE.PlaneGeometry(100, 100);                                                       // Ajuste la taille du sol
-const groundMaterial = new THREE.MeshBasicMaterial({ color: 0xfff5e1, side: THREE.DoubleSide });             // Appliquer la texture au sol
-ground = new THREE.Mesh(groundGeometry, groundMaterial);                                                        //crée le sol
-ground.rotation.x = -Math.PI / 2;                                                                               // Rotation pour placer le sol à l'horizontale
-ground.position.y = -0.29;
-scene.add(ground);
-
-
-
-
-
 
 //chargement, placement de la place de parking 1 et de ses textures sur la scène
 const parkingTexture = textureLoader.load('models/parking.jpg');
@@ -149,8 +178,9 @@ const parkingGeometry = new THREE.PlaneGeometry(10, 10);
 const parkingMaterial = new THREE.MeshBasicMaterial({ map: parkingTexture, side: THREE.DoubleSide });
 groundparking1 = new THREE.Mesh(parkingGeometry, parkingMaterial);
 groundparking1.rotation.x = -Math.PI / 2;                                                                       // Rotation pour placer la place à l'horizontale
-groundparking1.position.y = -0.28;
-groundparking1.position.z = -20;
+groundparking1.position.set(169,-0.28,268);
+groundparking1.scale.set(1.5,1.5,1.5);
+
 scene.add(groundparking1);
 
 
@@ -158,10 +188,15 @@ scene.add(groundparking1);
 //chargement, placement de la place de parking 2 et de ses textures sur la scène
 groundparking2 = new THREE.Mesh(parkingGeometry, parkingMaterial);
 groundparking2.rotation.x = -Math.PI / 2;                                                                       // Rotation pour placer la place à l'horizontale
-groundparking2.position.x = -20;
-groundparking2.position.y =-0;
-groundparking2.position.z = 0;
+groundparking2.position.set(-231,0,291);
+groundparking2.scale.set(1.5,1.5,1.5);
 scene.add(groundparking2);
+
+groundparking3 = new THREE.Mesh(parkingGeometry, parkingMaterial);
+groundparking3.rotation.x = -Math.PI / 2;                                                                       // Rotation pour placer la place à l'horizontale
+groundparking3.position.set(91,0,146);
+groundparking3.scale.set(1.5,1.5,1.5);
+scene.add(groundparking3);
 
 
 
@@ -176,8 +211,7 @@ const keys = {
   backward: false,
   left: false,
   right: false,
-  a: false,
-  q: false,
+  shift: false,
   enter: false,
 };
 
@@ -219,14 +253,11 @@ function handleKeyEvent(keyLetter, isPressed) {
       case 'Enter':
          keys.enter = isPressed;
           break;
+      case 'Shift' :
+        keys.shift = isPressed;
+        break;
   }
 };
-
-function changeSizeWithDelay(mesh, newSize, delay) {
-  setTimeout(() => {
-    mesh.scale.set(newSize, newSize, newSize);
-  }, delay);
-}
 
 //crée l'animation
 function animate() {
@@ -239,55 +270,65 @@ function animate() {
   if (car) {                                                              
 
     speed=0;
-    
+    boostpossible = true;  
 
     if (keys.forward) {                                                           //si la flèche avant est préssée, fait avancer la voiture avec une vitesse de 10 en avant
       direction.set(0, 0, -1);
-      speed = 10;
+      speed = 20;
       checkCollisionBuild();
+      Boost();
     }
     if (keys.backward) {                                                          //si la flèche arrière est préssée, fait avancer la voiture avec une vitesse de 10 en arrière 
       direction.set(0, 0, 1);
-      speed = 10;
+      speed = 20;
       checkCollisionBuild();
+      Boost();
     }
     if (keys.left) {                                                              //si la flèche gauche est préssée, fait avancer la voiture avec une vitesse de 10 vers la gauche
       direction.set(-1, 0, 0);
-      speed = 10;
+      speed = 20;
       checkCollisionBuild();
+      Boost();
     }
     if (keys.right) {                                                             //si la flèche droite est préssée, fait avancer la voiture avec une vitesse de 10 vers la droite
       direction.set(1, 0, 0);
-      speed = 10;
+      speed = 20;
       checkCollisionBuild();
+      Boost();
     }
 
     if (keys.forward && keys.right) {                                             //si la flèche droite et avant sont préssées, fait avancer la voiture avec une vitesse de 10 en tournant vers la droite
       direction.set(1, 0, -1);
-      speed = 10;
+      speed = 20;
       checkCollisionBuild();
+      Boost();
     }
 
     if (keys.forward && keys.left) {                                              //si la flèche gauche et avant sont préssées, fait avancer la voiture avec une vitesse de 10 en tournant vers la gauche
       direction.set(-1, 0, -1);
-      speed = 10;
+      speed = 20;
       checkCollisionBuild();
+      Boost();
     }
 
     if (keys.backward && keys.right) {                                            //si la flèche droite et arrière sont préssées, fait reculer la voiture avec une vitesse de 10 en tournant vers la droite
       direction.set(1, 0, 1);
-      speed = 10;
+      speed = 20;
       checkCollisionBuild();
+      Boost();
     }
 
     if (keys.backward && keys.left) {                                             //si la flèche gauche et arrière sont préssées, fait reculer la voiture avec une vitesse de 10 en tournant vers la gauche
       direction.set(-1, 0, 1);
-      speed = 10;
+      speed = 20;
       checkCollisionBuild();
+      Boost();
     }
 
   };
 
+  const carPosition = car.position;
+  coordinatesDiv.textContent = `Deplacez vous avec les flèches directionelles | Cliquez sur entrer sur une place de parking | Shift pour avoir un boost de vitesse | Position de la voiture : x: ${carPosition.x.toFixed(1)}, y: ${carPosition.y.toFixed(1)}, z: ${carPosition.z.toFixed(1)}`;
 
 //actualise la position de la caméra pour suivre la voiture et la faire regarder vers le mouvement commander  
   moveCar();
@@ -295,9 +336,9 @@ function animate() {
     controls.update();                                                              // Met à jour les contrôles lors de l'animation
     car.lookAt(car.position.clone().add(direction));
     car.rotation.y += Math.PI;
-    camera.position.y = car.position.y + 10;
+    camera.position.y = car.position.y + 15;
     camera.position.x = car.position.x ;
-    camera.position.z = car.position.z + 15 ;
+    camera.position.z = car.position.z + 27 ;
     if (car) {
       
       carBoundingBox.setFromObject(car);                                            // Mettre à jour la boîte englobante de la voiture à chaque frame
@@ -308,8 +349,6 @@ function animate() {
   }
 
 //crée une barre d'info pour connaître la position de la voiture à n'importe quel moment
-  const carPosition = car.position;
-  coordinatesDiv.textContent = `Position de la voiture : x: ${carPosition.x.toFixed(1)}, y: ${carPosition.y.toFixed(1)}, z: ${carPosition.z.toFixed(1)}`;
 
 
 };
@@ -325,7 +364,13 @@ const moveCar = () => {
   car.position.add(displacement);
 };
 
-
+function Boost(){
+  if(boostpossible){
+    if (keys.shift){
+        {speed = 35}
+    }
+}
+}
 
 
 
@@ -333,69 +378,73 @@ function checkCollisionParking() {
   // Met à jour les boîtes englobantes des batîments et place de parking
   parking1BoundingBox.setFromObject(parking1);
   parking2BoundingBox.setFromObject(parking2);
-
+  parking3BoundingBox.setFromObject(parking3);
 
   
   // Vérifie la collision de la voiture avec la place de parking 1. Si la collision a lieu, la position de la caméra change
   if (carBoundingBox.intersectsBox(parking1BoundingBox)) {
     // Collision détectée, prenez des mesures ici (par exemple, arrêtez la voiture)
     console.log('Collision détectée!');
-    camera.position.z = 15;
-    camera.position.y = 14;
-    camera.position.x = -21;
+    camera.position.set(160,70,350);
+    camera.lookAt(icam.position);
 
 
     //si la touche entrée est préssée, renvoie vers une page html
     if (keys.enter){
-      window.open('http://stackoverflow.com', '_blank');  //POUR OUVRIR LA PAGE WEB
+      window.open('/pagesweb/lycee.html', '_blank');  //POUR OUVRIR LA PAGE WEB
       console.log('Page chargée');
       speed = 0;
       keys.enter = false;
-}
+    }
 
   }
   // Vérifie la collision de la voiture avec la place de parking 2. Si la collision a lieu, la position de la caméra change
   if (carBoundingBox.intersectsBox(parking2BoundingBox)) {
     // Collision détectée, prenez des mesures ici (par exemple, arrêtez la voiture)
     console.log('Collision détectée!');
-    camera.position.z = 0;
-    camera.position.y = 15;
-    camera.position.x = 0;
+    camera.position.set(-170,42,340);
+    camera.lookAt(building2.position);
+
 
     //si la touche entrée est préssée, renvoie vers une page html    
     if (keys.enter){
       //window.open('page.html', 'Spam', 'width=500,height=300,left=100,top=100,toolbar=no,scrollbars=yes');  POUR OUVRIR LA PAGE WEB
-      window.open('http://stackoverflow.com', '_blank');  //POUR OUVRIR LA PAGE WEB
+      window.open('/pagesweb/parcours.html', '_blank');  //POUR OUVRIR LA PAGE WEB
       console.log('Page chargée');
       speed = 0;
+      keys.enter = false;
     }
   }
 
-  
+  if (carBoundingBox.intersectsBox(parking3BoundingBox)) {
+    // Collision détectée, prenez des mesures ici (par exemple, arrêtez la voiture)
+    console.log('Collision détectée!');
+    camera.position.set(30,65,170);
+    camera.lookAt(pise.position);
+
+    //si la touche entrée est préssée, renvoie vers une page html    
+    if (keys.enter){
+      window.open('/pagesweb/echange.html', '_blank');  //POUR OUVRIR LA PAGE WEB
+      console.log('Page chargée');
+      speed = 0;
+      keys.enter = false;
+    }
+  }
+
 }
 
 function checkCollisionBuild() {
   // Met à jour les boîtes englobantes des batîments et place de parking
   icamBoundingBox.setFromObject(icam);
-  cottageBoundingBox.setFromObject(cottage);
   maisonBoundingBox.setFromObject(maison);
+  piseBoundingBox.setFromObject(pise);
+  building1BoundingBox.setFromObject(building1);
+  building2BoundingBox.setFromObject(building2);
   // Vérifie la collision de la voiture avec le batîment de l'ICAM. Si la collision a lieu, la voiture ne peut pas traverser
-  if (carBoundingBox.intersectsBox(icamBoundingBox)) {
+  if (carBoundingBox.intersectsBox(icamBoundingBox) || carBoundingBox.intersectsBox(maisonBoundingBox) || carBoundingBox.intersectsBox(piseBoundingBox) || carBoundingBox.intersectsBox(building1BoundingBox) || carBoundingBox.intersectsBox(building2BoundingBox)){
     console.log('Collision détectée!');
     speed =0;
+    boostpossible = false;
   }
-  
-  // Vérifie la collision de la voiture avec le cottage. Si la collision a lieu, la voiture ne peut pas traverser
-  if (carBoundingBox.intersectsBox(cottageBoundingBox)) {
-    console.log('Collision détectée!');
-    speed=0;
-  }
-/*
-  if (carBoundingBox.intersectsBox(maisonBoundingBox)){
-    console.log('Collision détectée!');
-    speed =0;
-  }
-*/
-  
 }
 animate();
