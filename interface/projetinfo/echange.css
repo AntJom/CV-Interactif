@@ -1,0 +1,136 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.banner {
+    position: relative;
+    height: 600px; /* Ajustez la hauteur selon vos besoins */
+    background: url('images/colisé1.jpg') center/cover;
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner-text {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Ombre pour améliorer la lisibilité */
+    font-size: 2em;
+}
+
+.banner h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.banner p {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.text-and-image {
+    display: flex;
+    margin-top: 80px;
+    
+}
+
+.round-frame {
+    width: 650px;
+    height: 300px;
+    border-radius: 50%;
+    overflow: hidden; 
+    margin-right: 80px; /* Ajoute une marge entre l'image et le texte  */
+    margin-left: 20px;
+}
+
+
+.round-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+.text-section p {
+    font-size: 1.8em;
+    margin-right: 50px;
+}
+
+.timeline-section {
+    background: #fff; /* Couleur de fond de la section de la timeline */
+    /* text-align: center; */
+}
+
+.content-on-timeline {
+    padding: 0px;
+    margin-top: 50px;
+}
+
+.content-on-timeline img {
+    width: 100%; /* Calcul de la largeur totale avec la marge des deux côtés */
+    max-height: 100%; 
+    object-fit: cover; /* Ajuste la taille tout en préservant les proportions */
+}
+
+.titre-map{
+    justify-content: center;
+    margin-left: 20px;
+}
+
+.map-section {
+    background: url('images/carte_italie2.jpg') center/cover;
+    color: #fff;
+    margin-top: 50px; /* Ajustez selon vos besoins */
+    padding: 50px; /* Ajustez selon vos besoins */
+    text-align: justify; /* Justification du texte */
+}
+
+.content-on-map {
+    background: rgba(0, 0, 0, 0.5); /* Arrière-plan semi-transparent pour améliorer la lisibilité du texte */
+    padding: 20px;
+    padding-bottom: 50px;
+    overflow: hidden; /* Empêche le débordement du contenu */
+}
+
+.content-on-map h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.content-on-map p {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.content-on-map img {
+    width: 100%; /* La largeur de l'image occupe 100% de la largeur du conteneur */
+    height: auto; /* La hauteur de l'image s'ajuste automatiquement pour maintenir les proportions */
+    display: block; /* Élimine l'espace réservé sous l'image */
+    margin-bottom: 50px; /* Ajoute une marge en bas de l'image */
+}
+
+
+.lien {
+    text-align: center;
+    margin-top: 20px; /* Ajustez la marge selon vos préférences */
+}
+
+.lien p {
+    margin-bottom: 10px;
+}
+
+.lien-icone {
+    display: block; /* Permet de centrer l'icône */
+    margin: 0 auto; /* Centre l'icône horizontalement */
+}
