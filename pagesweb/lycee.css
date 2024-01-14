@@ -1,0 +1,73 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.main-title {
+    margin: 0;
+}
+
+.main-section {
+    display: flex;
+    width: 100%;
+}
+
+.left-section {
+    width: 50%;
+    box-sizing: border-box;
+    background: linear-gradient(to left, #ffc9e0, #ffffff); /* Gradient de couleur de gauche à droite */
+}
+
+.left-section > div {
+    padding: 0 50px 50px 50px; /* Marge ou padding de 50px entre chaque partie */
+}
+
+.right-section {
+    width: 50%;
+    background-color: #f4f4f4; /* Changez la couleur de fond selon vos préférences */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spline-element {
+    width: 100%;
+    height: 100%;
+}
+
+.text-section {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.contact-info {
+    margin: 0;
+}
+
+.education {
+    padding-bottom: 50px;
+}
+
+.interest {
+    margin-top: 50px;
+}
+
+.profil h2{
+    padding-top: 50px;
+    margin-top: 50px;
+}
