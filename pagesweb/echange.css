@@ -1,134 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="echange.css">
+    <title>Ma Bannière</title>
+</head>
+<body>
+    <header class="banner">
+        <div class="banner-text">
+            <h1>Mon Expérience en Italie</h1>
+            <p>Une année d'échange inoubliable</p>
+        </div>
+    </header>
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-}
+    <div class="text-and-image">
+        <div class="round-frame"><img src="images/pise2.jpg" alt="Moi devant la tour de Pise"></div>
+        <div class="text-section">
+            <p>Dans le cadre de ma formation post bac, l'opportunité de passer 1an à létranger s'est offerte à moi. J'ai donc pris mes bagages et me suis envolé vers l'Italie pour effectuer
+            une année dans l'Université polytechnique des Marches à Ancône</p>
+        </div>
+    </div>
 
-.banner {
-    position: relative;
-    height: 600px; /* Ajustez la hauteur selon vos besoins */
-    background: url('colisé1.jpg') center/cover;
-    color: #fff;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.banner-text {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Ombre pour améliorer la lisibilité */
-    font-size: 2em;
-}
-
-.banner h1 {
-    font-size: 2.5em;
-    margin: 0;
-}
-
-.banner p {
-    font-size: 1.2em;
-    margin: 0;
-}
-
-.content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-}
-
-.text-and-image {
-    display: flex;
-    margin-top: 80px;
+     <!-- Section avec la timeline -->
+    <section class="timeline-section">
+        <div class="content-on-timeline">
+            <img src="E:\IT_Project\pagesweb\images\timeline.jpeg" alt="Frise chronologique de mon échange"/>
+        </div>
+    </section>
+    <br>
     
-}
+    <h2 class="titre-map">Ce que m'a apporté cette expérience</h2>
 
-.round-frame {
-    width: 650px;
-    height: 300px;
-    border-radius: 50%;
-    overflow: hidden; 
-    margin-right: 80px; /* Ajoute une marge entre l'image et le texte  */
-    margin-left: 20px;
-}
+    <!-- Section carte Italie -->
+    <section class="map-section">
+        <!-- Contenu que vous voulez ajouter sur la carte -->
+        <div class="content-on-map">
+            <h2>Mes apprentissages</h2>
+            <p>Participer à l'aventure ERASMUS offre une expérience d'apprentissage unique, diversifiée et enrichissante.
+                Tout d'abord, elle représente une immersion totale dans l'indépendance. Vivre loin de sa famille, au cœur d'une métropole, peut être un changement radical. Les démarches 
+                administratives liées au pays d'accueil, ainsi que la recherche d'un logement, peuvent s'avérer particulièrement complexes. En cas de difficulté, l'autonomie devient la clé,
+                car on peut généralement compter uniquement sur soi-même pour résoudre ses problèmes. L'enrichissement culturel constitue un autre aspect central de cette expérience. Explorer le
+                pays et la ville, engager des discussions avec les habitants locaux, permettent une immersion profonde dans une nouvelle culture. Les amitiés tissées avec d'autres étudiants 
+                ERASMUS, venant des quatre coins du monde, sont des sources constantes d'échanges culturels, contribuant ainsi à une vision plus complète du monde. Sur le plan pédagogique, 
+                en plus des différentes matières abordées en classe, l'ERASMUS propose une plongée dans de nouvelles méthodes d'enseignement propre au pays d'accueil. En conclusion, l'ERASMUS 
+                est bien plus qu'une expérience académique. Elle forge des individus autonomes, culturellement éclairés et prêts à relever les défis de la vie.                
+            </p>
+        </div>
+    </section>
 
 
-.round-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    <footer>
+        <div class="lien">
+            <p>Coordonnées : benjamin.martins@2026.icam.fr | 07 68 50 32 08</p>
+            
+            <a target="_blank" href="https://fr.linkedin.com/" class="lien-icone">
+                <img src="images/linkedin_icon.png" alt="Linkedin" >
+            </a>
+           
+        </div>
+    </footer>
 
 
-.text-section p {
-    font-size: 1.8em;
-    margin-right: 50px;
-}
-
-.timeline-section {
-    background: #fff; /* Couleur de fond de la section de la timeline */
-    /* text-align: center; */
-}
-
-.content-on-timeline {
-    padding: 0px;
-    margin-top: 50px;
-}
-
-.content-on-timeline img {
-    width: 100%; /* Calcul de la largeur totale avec la marge des deux côtés */
-    max-height: 100%; 
-    object-fit: cover; /* Ajuste la taille tout en préservant les proportions */
-}
-
-.titre-map{
-    justify-content: center;
-    margin-left: 20px;
-}
-
-.map-section {
-    background: url('carte_italie2.jpg') center/cover;
-    color: #fff;
-    margin-top: 50px; /* Ajustez selon vos besoins */
-    padding: 50px; /* Ajustez selon vos besoins */
-    text-align: justify; /* Justification du texte */
-}
-
-.content-on-map {
-    background: rgba(0, 0, 0, 0.5); /* Arrière-plan semi-transparent pour améliorer la lisibilité du texte */
-    padding: 20px;
-    padding-bottom: 50px;
-    overflow: hidden; /* Empêche le débordement du contenu */
-}
-
-.content-on-map h2 {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
-.content-on-map p {
-    font-size: 1.2em;
-    margin: 0;
-}
-
-.content-on-map img {
-    width: 100%; /* La largeur de l'image occupe 100% de la largeur du conteneur */
-    height: auto; /* La hauteur de l'image s'ajuste automatiquement pour maintenir les proportions */
-    display: block; /* Élimine l'espace réservé sous l'image */
-    margin-bottom: 50px; /* Ajoute une marge en bas de l'image */
-}
-
-.lien{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    margin-left: 20px;
-    margin-bottom: 20px;
-}
-
-.lien-icone:hover {
-    opacity: 0.5;
-  }
+</body>
+</html>
