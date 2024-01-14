@@ -11,3 +11,6 @@ npm install --save-dev vite
 
 Enfin pour lancer l'hébergeur il suffit de rentre la commande suivante dans le terminal :
 npx vite
+
+
+Aussi nous n'avons pas pu ajouter la map sur à cause de sa taille (plus de 25Mo). Vous pouvez la télécharger sur ce drive (google drive de l'école) : https://drive.google.com/file/d/1VD4FOot0Ru-LaXb73CtszOi0CbUEw0fX/view?usp=drive_link
