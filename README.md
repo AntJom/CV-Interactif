@@ -11,3 +11,7 @@ npm install --save-dev vite
 
 Enfin pour lancer l'hébergeur il suffit de rentre la commande suivante dans le terminal :
 npx vite
+
+Pour utiliser l'interface, il faut utiliser Wampserver64. Il faut tout d'abord lancer tous les services.
+Il faut ensuite aller dans phpMyAdmin que l'on peut trouver dans la barre des tâches de l'ordinateur en cliquent sur l'icône de Wampserver et se connecter à l'aide de l'identifiant 'root'.
+Afin de récupérer la base de données, il faut importer le fichier SQL 'donnees' déposé sur ce Github.
