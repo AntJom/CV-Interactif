@@ -53,7 +53,7 @@ body {
     float: right;
     height: auto;
     text-align: justify;
-
+    padding-right: 50px;
 }
 
 .lycee-section img{
@@ -160,6 +160,7 @@ body {
   height: auto;
   text-align: justify;
   padding-top: 50px;
+  padding-right: 10px;
 }
 
 .certifications-section img{
