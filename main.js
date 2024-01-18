@@ -61,7 +61,7 @@ let groundparking3;
 let boostpossible;
 let building1;
 let building2;
-
+let pov;
 
 const icamBoundingBox = new THREE.Box3();                                                               // Créer une boîte englobante pour chaque bâtiment, place de parking
 const parking1BoundingBox = new THREE.Box3();
@@ -71,6 +71,7 @@ const parking3BoundingBox = new THREE.Box3();
 const piseBoundingBox = new THREE.Box3();
 const building1BoundingBox = new THREE.Box3();
 const building2BoundingBox = new THREE.Box3();
+const povBoundingBox = new THREE.Box3();
 
 const geometry = new THREE.BoxGeometry(10,3,5);                                                         //crée une boîte transparente sur le parking 1
 const material = new THREE.MeshBasicMaterial({  color: 0x00ff00 , transparent: true , opacity : 0});
@@ -94,6 +95,14 @@ const parking3 = new THREE.Mesh(geometry, material);
 parking3.position.set(91,0,146);
 scene.add(parking3);
 
+
+pov = new THREE.Mesh(geometry, material);
+pov.position.set(0,0,165);
+scene.add(pov);
+
+const parkingPOV = new THREE.Mesh( geometry, material ); 
+parkingPOV.position.set(180,0,330);
+scene.add(parkingPOV);
 
 
 
@@ -183,6 +192,14 @@ groundparking1.scale.set(1.5,1.5,1.5);
 
 scene.add(groundparking1);
 
+const photoTexture = textureLoader.load('models/photo.jpg');
+const photoGeometry = new THREE.PlaneGeometry(10, 10);
+const photoMaterial = new THREE.MeshBasicMaterial({ map: photoTexture, side: THREE.DoubleSide });
+const groundphoto = new THREE.Mesh(photoGeometry, photoMaterial);
+groundphoto.rotation.x = -Math.PI / 2;   
+groundphoto.position.set(180,0,330);
+groundphoto.scale.set(1.5,1.5,1.5);
+scene.add(groundphoto);
 
 
 //chargement, placement de la place de parking 2 et de ses textures sur la scène
@@ -379,6 +396,7 @@ function checkCollisionParking() {
   parking1BoundingBox.setFromObject(parking1);
   parking2BoundingBox.setFromObject(parking2);
   parking3BoundingBox.setFromObject(parking3);
+  povBoundingBox.setFromObject(parkingPOV);
 
   
   // Vérifie la collision de la voiture avec la place de parking 1. Si la collision a lieu, la position de la caméra change
@@ -430,6 +448,18 @@ function checkCollisionParking() {
       keys.enter = false;
     }
   }
+
+
+  if (carBoundingBox.intersectsBox(povBoundingBox)) {
+    // Collision détectée, prenez des mesures ici (par exemple, arrêtez la voiture)
+    console.log('Collision détectée!');
+    camera.position.set(-50,150,460);
+    camera.lookAt(pov.position);
+
+
+
+  }
+
 
 }
 
